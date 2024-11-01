@@ -32,12 +32,18 @@ class Module:
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = True
+        for module in self.modules():
+            module.train()
+        # raise NotImplementedError('Need to implement for Task 0.4') 
 
     def eval(self) -> None:
         """Set the mode of this module and all descendent modules to `eval`."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = False
+        for module in self.modules():
+            module.eval()
+        # raise NotImplementedError('Need to implement for Task 0.4')
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """Collect all the parameters of this module and its descendents.
@@ -48,12 +54,23 @@ class Module:
 
         """
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        named_parameters = []
+        for key, parameter in self._parameters.items():
+            named_parameters.append((key, parameter))
+
+        for key, module in self._modules.items():
+            for name, parameter in module.named_parameters():
+                named_parameters.append((key + "." + name, parameter))
+            
+        return named_parameters
+        # raise NotImplementedError('Need to implement for Task 0.4')
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        parameters = self.named_parameters()
+        return [parameter for _, parameter in parameters]
+        # raise NotImplementedError('Need to implement for Task 0.4')
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
